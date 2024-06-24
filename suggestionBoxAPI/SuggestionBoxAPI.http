@@ -1,0 +1,6 @@
+@suggestionBoxAPI_HostAddress = http://localhost:5220
+
+GET {{suggestionBoxAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
