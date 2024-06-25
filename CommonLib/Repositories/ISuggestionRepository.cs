@@ -1,6 +1,6 @@
-﻿using SuggestionAPI.Domain;
+﻿using Common.Model;
 
-namespace SuggestionAPI.Repositories
+namespace Common.Repositories
 {
     public interface ISuggestionRepository
     {

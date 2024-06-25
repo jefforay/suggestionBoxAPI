@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SuggestionAPI.Domain;
+using Common.Model;
 
-namespace SuggestionAPI.Repositories;
+namespace Common.Repositories;
 
 public sealed partial class SuggestionDbContext : DbContext
 {

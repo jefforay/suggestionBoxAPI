@@ -1,4 +1,4 @@
-﻿namespace SuggestionAPI.Options;
+﻿namespace Common.Options;
 
 public sealed class ConnectionSqlOptions
 {

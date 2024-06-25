@@ -1,7 +1,7 @@
-﻿using SuggestionAPI.Domain;
+﻿using Common.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace SuggestionAPI.Repositories;
+namespace Common.Repositories;
 
 public sealed class SuggestionRepository(SuggestionDbContext context) : ISuggestionRepository
 {

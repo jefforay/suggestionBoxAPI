@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SuggestionAPI.Hubs;
-using SuggestionAPI.Repositories;
-using SuggestionAPI.Options;
+using Common.Repositories;
+using Common.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 

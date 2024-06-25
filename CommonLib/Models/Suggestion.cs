@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SuggestionAPI.Domain;
+namespace Common.Model;
 
 public class Suggestion
 {
@@ -64,5 +64,5 @@ public class Suggestion
     [StringLength(100, MinimumLength = 3)]
     [DataType(DataType.Text)]
     public string? EventType { get; set; }
-   
+
 }

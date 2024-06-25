@@ -1,4 +1,4 @@
-using SuggestionAPI.Domain;
+using Common.Model;
 using SuggestionAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 

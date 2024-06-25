@@ -1,0 +1,86 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client;
+@page "/";
+@inject NavigationManager NavigationManager;
+@implements IAsyncDisposable;
+
+<PageTitle>Suggestion Box</PageTitle>
+
+<h3>Home</h3>
+
+@if (suggestions == null)
+{
+    <h4>Loading...</h4>
+}
+else
+{
+<div class="table" style="overflow: auto; padding-bottom: 40px; ">
+    <QuickGrid Items="@filteredItems" Pagination="@pagination">
+        <PropertyColumn Property="@(c => c.Id)" Sortable="true"></PropertyColumn>
+        <PropertyColumn Property="@(c => c.DateTimeStart)" Sortable="true"></PropertyColumn>
+        <PropertyColumn Property="@(c => c.DateTimeEnd)" Sortable="true"></PropertyColumn>
+        <PropertyColumn Property="@(c => c.Category)" Sortable="true"></PropertyColumn>
+        <PropertyColumn Property="@(c => c.Description)" Sortable="true"></PropertyColumn>
+        <PropertyColumn Property="@(c => c.Title)" Sortable="true"></PropertyColumn>
+        <PropertyColumn Property="@(c => c.UserId)" Sortable="true"></PropertyColumn>
+        <PropertyColumn Property="@(c => c.UserName)" Sortable="true"></PropertyColumn>
+        <PropertyColumn Property="@(c => c.EventType)" Sortable="true"></PropertyColumn>
+    </QuickGrid>
+</div>
+}
+
+@code {
+    private List<Suggestion> suggestions = new();
+    PaginationState pagination = new PaginationState { ItemsPerPage = 14 };
+
+    private HubConnection? hubConnection;
+    public bool IsConnected => hubConnection?.State == HubConnectionState.Connected;
+
+    IQueryable<Suggestion> filteredItems => suggestions
+    .AsQueryable().OrderByDescending(x => x.Id);
+
+    protected override async void OnInitialized()
+    {
+        SetHub();
+        StateHasChanged();
+    }
+
+    private async void SetHub()
+    {
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl($"http://localhost/loghub")
+        .WithAutomaticReconnect()
+        .Build();
+
+        hubConnection.On<Suggestion>("receiveSuggestion", Suggestion =>
+        {
+            Suggestion existingSuggestion = FindSuggestionById(Suggestion.Id);
+            if (existingSuggestion == null)
+            {
+                suggestions.Insert(0, Suggestion);
+            }
+            InvokeAsync(StateHasChanged);
+        });
+
+        try
+        {
+            await hubConnection.StartAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error starting connection: {ex.Message}");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+
+    private Suggestion FindSuggestionById(int id)
+    {
+        return suggestions.FirstOrDefault(suggestion => suggestion.Id == id)!;
+    }
+}

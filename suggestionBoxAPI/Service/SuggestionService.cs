@@ -1,8 +1,8 @@
 ﻿using SuggestionAPI.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using SuggestionAPI.Domain;
-using SuggestionAPI.Repositories;
+using Common.Model;
+using Common.Repositories;
 
 namespace SuggestionAPI.Service;
 

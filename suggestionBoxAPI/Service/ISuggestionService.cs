@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SuggestionAPI.Domain;
+using Common.Model;
 
 namespace SuggestionAPI.Service
 {

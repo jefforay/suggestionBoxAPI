@@ -1,4 +1,4 @@
-﻿using SuggestionAPI.Domain;
+﻿using Common.Model;
 using Microsoft.AspNetCore.SignalR;
 
 namespace SuggestionAPI.Hubs;
