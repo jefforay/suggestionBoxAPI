@@ -14,7 +14,8 @@ public sealed class SuggestionRepository(SuggestionDbContext context) : ISuggest
 
         if (suggestion != null)
         {
-            await _suggestionTable.Where(l => l.Id == id).ExecuteDeleteAsync();
+            _suggestionTable.Remove(suggestion);
+            await _context.SaveChangesAsync();
         }
 
         return true;
@@ -34,7 +35,19 @@ public sealed class SuggestionRepository(SuggestionDbContext context) : ISuggest
 
         if (existingSuggestion != null)
         {
-            _suggestionTable.Entry(existingSuggestion).CurrentValues.SetValues(suggestion);
+            var properties = typeof(Suggestion).GetProperties();
+
+            foreach (var property in properties)
+            {
+                var newValue = property.GetValue(suggestion);
+                var defaultValue = property.PropertyType.IsValueType ? Activator.CreateInstance(property.PropertyType) : null;
+
+                if (newValue != null && !newValue.Equals(defaultValue))
+                {
+                    property.SetValue(existingSuggestion, newValue);
+                }
+            }
+
             await _context.SaveChangesAsync();
         }
 

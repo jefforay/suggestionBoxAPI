@@ -12,7 +12,7 @@ public sealed class SuggestionController(ISuggestionService suggestionService, I
     private readonly ISuggestionService _suggestionService = suggestionService;
 
     [HttpGet("{id:int}")]
-    [ResponseCache(Duration = 60 * 60 * 24, Location = ResponseCacheLocation.Any, NoStore = false)]
+    //[ResponseCache(Duration = 60 * 60 * 24, Location = ResponseCacheLocation.Any, NoStore = false)]
     public async Task<ActionResult<Suggestion>> Get(int id)
     {
         try
@@ -27,7 +27,7 @@ public sealed class SuggestionController(ISuggestionService suggestionService, I
     }
 
     [HttpGet]
-    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, NoStore = false)]
+    //[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, NoStore = false)]
     public async Task<ActionResult<List<Suggestion>>> Get()
     {
         try

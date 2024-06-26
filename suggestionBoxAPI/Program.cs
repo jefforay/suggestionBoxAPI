@@ -16,16 +16,24 @@ builder.Services.AddScoped<ISuggestionRepository, SuggestionRepository>();
 builder.Services.AddScoped<ISuggestionService, SuggestionService>();
 
 var connectionOptions = builder.Configuration.GetSection("ConnectionSqlOptions").Get<ConnectionSqlOptions>();
-builder.Services.Configure<ConnectionSqlOptions>(builder.Configuration.GetSection("ConnectionSqlOptions"));
 
-builder.Services.AddDbContext<SuggestionDbContext>(options =>
-    options.UseSqlServer(connectionOptions.DefaultConnection, sqlServerOptionsAction: sqlOptions =>
-    {
-        sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(30),
-            errorNumbersToAdd: null);
-    }));
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<SuggestionDbContext>(options =>
+            options.UseInMemoryDatabase("SuggestionBox"));
+}
+else
+{
+    builder.Services.Configure<ConnectionSqlOptions>(builder.Configuration.GetSection("ConnectionSqlOptions"));
+    builder.Services.AddDbContext<SuggestionDbContext>(options =>
+        options.UseSqlServer(connectionOptions.DefaultConnection, sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        }));
+}
 
 var app = builder.Build();
 
